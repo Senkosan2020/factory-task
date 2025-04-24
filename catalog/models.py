@@ -23,6 +23,10 @@ class Master(models.Model):
     at_work = models.BooleanField(default=False)
     halls = models.ManyToManyField(Hall, related_name='masters')
 
+    def clean(self):
+        if len(self.master_id) != 10:
+            raise ValidationError("master_id must be exactly 10 characters long.")
+
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
@@ -44,8 +48,14 @@ class Work(models.Model):
     allowed = models.BooleanField(default=False)
 
     def clean(self):
+        if len(self.id_work) != 7:
+            raise ValidationError("id_work must be exactly 7 characters long.")
+
         if self.time_on_work < 0:
             raise ValidationError("Work time must be a positive number.")
+
+        if int(self.time_on_work) % 9 != 0:
+            raise ValidationError("Work time must be divisible by 9.")
 
     def __str__(self):
         return f"Work {self.id_work} by {self.master} - {self.specialization}"
