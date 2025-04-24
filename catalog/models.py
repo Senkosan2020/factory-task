@@ -49,3 +49,21 @@ class Work(models.Model):
 
     def __str__(self):
         return f"Work {self.id_work} by {self.master} - {self.specialization}"
+
+
+class Worker(models.Model):
+    worker_id = models.CharField(max_length=10, primary_key=True, unique=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    password = models.CharField(max_length=128)
+    specializations = models.ManyToManyField(Specialization, related_name='workers')
+    box = models.ForeignKey(Box, on_delete=models.PROTECT, related_name='workers')
+    works = models.ManyToManyField(Work, related_name='workers', blank=True)
+    at_work = models.BooleanField(default=False)
+
+    def clean(self):
+        if len(self.worker_id) != 10:
+            raise ValidationError("worker_id must be exactly 10 characters long.")
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
