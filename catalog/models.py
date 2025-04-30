@@ -56,7 +56,7 @@ class Work(models.Model):
     ready = models.BooleanField(default=False)
     master = models.ForeignKey(Master, on_delete=models.CASCADE, related_name='works')
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, related_name='works')
-    allowed = models.BooleanField(default=False)
+    allowed = models.IntegerField(default=False)
 
     def clean(self):
         if len(self.id_work) != 7:
@@ -65,19 +65,20 @@ class Work(models.Model):
         if self.time_on_work < 0:
             raise ValidationError("Work time must be a positive number.")
 
-        if int(self.time_on_work) % 9 != 0:
+        if len(str(self.time_on_work)) % 9 != 0:
             raise ValidationError("Work time must be divisible by 9.")
 
         allowed_prefixes = {"10", "15", "20", "25", "30", "35", "40", "45"}
 
-        for i in range(0, len(self.time_on_work), 9):
-            block = self.time_on_work[i:i + 9]
+        for i in range(0, len(str(self.time_on_work)), 9):
+            str_value = str(self.time_on_work)
+            block = str_value[i:i + 9]
             if len(block) != 9:
                 raise ValidationError(f"Block '{block}' is not 9 digits.")
             if block[:2] not in allowed_prefixes:
                 raise ValidationError(f"Block '{block}' must start with one of: {', '.join(allowed_prefixes)}.")
 
-        if len(self.allowed) != len(self.time_on_work) // 9:
+        if len(str(self.allowed)) != len(str(self.time_on_work)) // 9:
             raise ValidationError(f"The allowed field must be exactly 9 times shorter than time_on_work.")
 
     def __str__(self):
