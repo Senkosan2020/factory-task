@@ -1,11 +1,22 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Specialization(models.Model):
     specialization = models.CharField(max_length=255, primary_key=True, unique=True)
+    number = models.PositiveIntegerField(
+        validators=[
+            MinValueValidator(10),
+            MaxValueValidator(99)
+        ]
+    )
 
     def __str__(self):
         return self.specialization
+
+    def clean(self):
+        if self.number % 5 != 0:
+            raise ValidationError({'number': 'Number must be divisible by 5.'})
 
 
 class Hall(models.Model):
@@ -56,6 +67,18 @@ class Work(models.Model):
 
         if int(self.time_on_work) % 9 != 0:
             raise ValidationError("Work time must be divisible by 9.")
+
+        allowed_prefixes = {"10", "15", "20", "25", "30", "35", "40", "45"}
+
+        for i in range(0, len(self.time_on_work), 9):
+            block = self.time_on_work[i:i + 9]
+            if len(block) != 9:
+                raise ValidationError(f"Block '{block}' is not 9 digits.")
+            if block[:2] not in allowed_prefixes:
+                raise ValidationError(f"Block '{block}' must start with one of: {', '.join(allowed_prefixes)}.")
+
+        if len(self.allowed) != len(self.time_on_work) // 9:
+            raise ValidationError(f"The allowed field must be exactly 9 times shorter than time_on_work.")
 
     def __str__(self):
         return f"Work {self.id_work} by {self.master} - {self.specialization}"
