@@ -52,34 +52,17 @@ class Box(models.Model):
 
 class Work(models.Model):
     id_work = models.CharField(max_length=7, primary_key=True, unique=True)
-    time_on_work = models.DecimalField(max_digits=72, decimal_places=0)
+    time_on_work = models.DecimalField(max_digits=7, decimal_places=0)
     ready = models.BooleanField(default=False)
     master = models.ForeignKey(Master, on_delete=models.CASCADE, related_name='works')
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, related_name='works')
-    allowed = models.IntegerField(default=False)
 
     def clean(self):
         if len(self.id_work) != 7:
             raise ValidationError("id_work must be exactly 7 characters long.")
 
-        if self.time_on_work < 0:
-            raise ValidationError("Work time must be a positive number.")
-
-        if len(str(self.time_on_work)) % 9 != 0:
-            raise ValidationError("Work time must be divisible by 9.")
-
-        allowed_prefixes = {"10", "15", "20", "25", "30", "35", "40", "45"}
-
-        for i in range(0, len(str(self.time_on_work)), 9):
-            str_value = str(self.time_on_work)
-            block = str_value[i:i + 9]
-            if len(block) != 9:
-                raise ValidationError(f"Block '{block}' is not 9 digits.")
-            if block[:2] not in allowed_prefixes:
-                raise ValidationError(f"Block '{block}' must start with one of: {', '.join(allowed_prefixes)}.")
-
-        if len(str(self.allowed)) != len(str(self.time_on_work)) // 9:
-            raise ValidationError(f"The allowed field must be exactly 9 times shorter than time_on_work.")
+        if self.time_on_work != 7:
+            raise ValidationError("time_on_work must be exactly 9 characters long.")
 
     def __str__(self):
         return f"Work {self.id_work} by {self.master} - {self.specialization}"
