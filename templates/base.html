@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Factory{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <meta charset="UTF-8">
+  <title>{% block title %}Factory{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{% url 'index' %}">Home</a>
 
-            <div class="dropdown">
-                <button class="dropdown-button">Menu ▼</button>
-                <div class="dropdown-content">
-                    <a href="#">Item 1</a>
-                    <a href="#">Item 2</a>
-                    <a href="#">Item 3</a>
-                </div>
-            </div>
+<nav>
+  <div class="nav-left">
+    <a href="#" class="nav-button">Home</a>
+  </div>
+  <div class="nav-center">
+    <div class="menu">
+      <a class="nav-button">Menu ▾</a>
+      <ul class="menu-list">
+        <li><a href="#">Option 1</a></li>
+        <li><a href="#">Option 2</a></li>
+        <li><a href="#">Option 3</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="nav-right">
+    <a href="#" class="nav-button">Login</a>
+  </div>
+</nav>
 
-            <a href="/admin/">Admin</a>
-        </nav>
-    </header>
-
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+<main>
+  {% block content %}
+  {% endblock %}
+</main>
 </body>
 </html>
 
