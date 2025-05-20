@@ -2,14 +2,13 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}Factory{% endblock %}</title>
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 </head>
 <body>
 
-<nav>
+<nav class="navbar">
   <div class="nav-left">
     <a href="#" class="nav-button">Home</a>
   </div>
@@ -28,10 +27,9 @@
   </div>
 </nav>
 
-<main>
-  {% block content %}
-  {% endblock %}
-</main>
+{% block content %}
+{% endblock %}
+
 </body>
 </html>
 
