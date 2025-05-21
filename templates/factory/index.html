@@ -13,17 +13,18 @@
 <div class="main">
   <div class="pill-container">
     <div class="pill-item">
-      <p class="number">123</p>
-      <p class="label">Одиниці</p>
+      <p class="number">{{ masters_count }}</p>
+      <p class="label">Masters</p>
     </div>
     <div class="pill-item">
-      <p class="number">456</p>
-      <p class="label">Двійки</p>
+      <p class="number">{{ workers_count }}</p>
+      <p class="label">Workers</p>
     </div>
     <div class="pill-item">
-      <p class="number">789</p>
-      <p class="label">Трійки</p>
+      <p class="number">{{ boxes_count }}</p>
+      <p class="label">Boxes</p>
     </div>
   </div>
+</div>
 
   {% endblock %}
