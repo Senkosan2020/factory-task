@@ -10,7 +10,7 @@
 
 <nav class="navbar">
   <div class="nav-left">
-    <a href="#" class="nav-button">Home</a>
+    <a href="/" class="nav-button">Home</a>
   </div>
   <div class="nav-center">
     <div class="menu">
@@ -23,7 +23,12 @@
     </div>
   </div>
   <div class="nav-right">
-    <a href="#" class="nav-button">Login</a>
+    {% if worker %}
+    <a href="{% url 'logout' %}" class="nav-button">Logout</a>
+    <span>{{ worker.first_name }} {{ worker.last_name }}</span>
+    {% else %}
+    <a href="{% url 'login' %}" class="nav-button">Login</a>
+    {% endif %}
   </div>
 </nav>
 

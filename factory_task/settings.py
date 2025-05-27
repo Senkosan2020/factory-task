@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'factory_task.context_processors.current_worker',
             ],
         },
     },
@@ -131,4 +132,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+]
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher'
 ]
