@@ -25,7 +25,8 @@
   <div class="nav-right">
     {% if worker %}
     <a href="{% url 'logout' %}" class="nav-button">Logout</a>
-    <span>{{ worker.first_name }} {{ worker.last_name }}</span>
+    <span class="separator">|</span>
+    <span class="just-text">{{ worker.first_name }} {{ worker.last_name }}</span>
     {% else %}
     <a href="{% url 'login' %}" class="nav-button">Login</a>
     {% endif %}
