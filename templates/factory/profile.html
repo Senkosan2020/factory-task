@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+  <div class="profile-container">
+    <h2>Personal Information</h2>
+    {% if worker %}
+      <ul class="profile-list">
+        <li><strong>Worker ID:</strong> {{ worker.worker_id }}</li>
+        <li><strong>First Name:</strong> {{ worker.first_name }}</li>
+        <li><strong>Last Name:</strong> {{ worker.last_name }}</li>
+        <li><strong>Box:</strong> {{ worker.box }}</li>
+        <li><strong>Specializations:</strong>
+          {% for spec in worker.specializations.all %}
+            {{ spec.specialization }}{% if not forloop.last %}, {% endif %}
+          {% empty %}
+            None
+          {% endfor %}
+        </li>
+        <li><strong>Works:</strong>
+          {% for w in worker.works.all %}
+            {{ w.id_work }}{% if not forloop.last %}, {% endif %}
+          {% empty %}
+            None
+          {% endfor %}
+        </li>
+        <li><strong>At Work:</strong> {% if worker.at_work %}Yes{% else %}No{% endif %}</li>
+      </ul>
+    {% else %}
+      <p>Please <a href="{% url 'login' %}">log in</a> to view your profile.</p>
+    {% endif %}
+  </div>
+{% endblock %}

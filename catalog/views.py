@@ -34,3 +34,15 @@ def worker_login(request):
 def worker_logout(request):
     request.session.pop('worker_pk', None)
     return redirect('index')
+
+
+def profile(request):
+    worker_pk = request.session.get("worker_pk")
+    if not worker_pk:
+        return redirect("login")
+    try:
+        worker = Worker.objects.get(pk=worker_pk)
+    except Worker.DoesNotExist:
+        return redirect("login")
+
+    return render(request, "factory/profile.html", {"worker": worker})
