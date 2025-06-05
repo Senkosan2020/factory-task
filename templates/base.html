@@ -9,12 +9,12 @@
 <body>
 
 <nav class="navbar">
-  <div class="nav-left">
-    <a href="/" class="nav-button">Home</a>
+  <div class="navbar-left">
+    <a href="/" class="navbar-button">Home</a>
   </div>
-  <div class="nav-center">
+  <div class="navbar-center">
     <div class="menu">
-      <a class="nav-button">Menu ▾</a>
+      <a class="navbar-button">Menu ▾</a>
       <ul class="menu-list">
         {% if worker %}
           <li><a href="#">Option 1</a></li>
@@ -26,13 +26,13 @@
       </ul>
     </div>
   </div>
-  <div class="nav-right">
+  <div class="navbar-right">
     {% if worker %}
-    <a href="{% url 'logout' %}" class="nav-button">Logout</a>
+    <a href="{% url 'logout' %}" class="navbar-button">Logout</a>
     <span class="separator">|</span>
     <span class="just-text">{{ worker.first_name }} {{ worker.last_name }}</span>
     {% else %}
-    <a href="{% url 'login' %}" class="nav-button">Login</a>
+    <a href="{% url 'login' %}" class="navbar-button">Login</a>
     {% endif %}
   </div>
 </nav>

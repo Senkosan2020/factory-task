@@ -13,7 +13,7 @@ html, body {
 }
 
 
-nav {
+.navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 50px;
@@ -23,7 +23,7 @@ nav {
   z-index: 10;
 }
 
-.nav-button {
+.navbar-button {
   color: var(--main-text-color);
   text-decoration: none;
   display: inline-block;
@@ -32,20 +32,20 @@ nav {
   cursor: pointer;
 }
 
-.nav-left {
+.navbar-left {
 position: absolute;
 top: 0;
 left: 10px;
 }
 
-.nav-center {
+.navbar-center {
 position: absolute;
 top: 0;
 left: 50%;
 transform: translateX(-50%);
 }
 
-.nav-right {
+.navbar-right {
 position: absolute;
 top: 0;
 right: 10px;
@@ -128,7 +128,7 @@ display: block;
       color: var(--main-text-color);
 }
 
-.nav-right .separator {
+.navbar-right .separator {
   margin: 0 4px;
   color: var(--main-text-color);
 }
@@ -197,4 +197,78 @@ display: block;
 
 .login-container .form-group input {
   font-size: 1.5rem;
+}
+
+.profile-container {
+  display: flex;
+  margin-top: 50px;
+  height: calc(100% - 50px);
+}
+
+.vertical-toolbar {
+  width: 200px;
+  background-color: #f0f0f0;
+  border-right: 1px solid #ccc;
+  box-sizing: border-box;
+
+  position: fixed;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  padding-top: 20px;
+}
+
+.vertical-toolbar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.vertical-toolbar nav li + li {
+  margin-top: 15px;
+}
+
+.vertical-toolbar .inactive-link {
+  display: block;
+  color: #999;
+  text-decoration: none;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.content-area {
+  margin-left: 200px;
+  width: calc(100% - 200px);
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+}
+
+.work-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #2c2c2c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.work-button:hover {
+  background-color: #444;
+}
+
+.profile-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 80px;
+}
+
+.profile-list li {
+  margin-bottom: 8px;
+  font-size: 1rem;
 }

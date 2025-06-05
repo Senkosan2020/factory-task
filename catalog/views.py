@@ -46,3 +46,22 @@ def profile(request):
         return redirect("login")
 
     return render(request, "factory/profile.html", {"worker": worker})
+
+
+def toggle_at_work(request):
+    if request.method != "POST":
+        return redirect("profile")
+
+    worker_pk = request.session.get("worker_pk")
+    if not worker_pk:
+        return redirect("login")
+
+    try:
+        worker = Worker.objects.get(pk=worker_pk)
+    except Worker.DoesNotExist:
+        return redirect("login")
+
+    worker.at_work = not worker.at_work
+    worker.save(update_fields=["at_work"])
+
+    return redirect("profile")
