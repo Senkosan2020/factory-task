@@ -17,9 +17,7 @@
       <a class="navbar-button">Menu ▾</a>
       <ul class="menu-list">
         {% if worker %}
-          <li><a href="#">Option 1</a></li>
-          <li><a href="#">Option 2</a></li>
-          <li><a href="#">Option 3</a></li>
+          <li><a href="{% url 'profile' %}">Profile</a></li>
         {% else %}
           <li><a href="{% url 'login' %}">Login</a></li>
         {% endif %}
@@ -30,7 +28,7 @@
     {% if worker %}
     <a href="{% url 'logout' %}" class="navbar-button">Logout</a>
     <span class="separator">|</span>
-    <span class="just-text">{{ worker.first_name }} {{ worker.last_name }}</span>
+    <a href="{% url 'profile' %}" class="navbar-button">{{ worker.first_name }} {{ worker.last_name }}</a>
     {% else %}
     <a href="{% url 'login' %}" class="navbar-button">Login</a>
     {% endif %}
