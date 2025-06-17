@@ -209,13 +209,12 @@ display: block;
   width: 200px;
   background-color: #f0f0f0;
   border-right: 1px solid #ccc;
-  box-sizing: border-box;
-
   position: fixed;
   top: 50px;
   bottom: 0;
   left: 0;
-  padding-top: 20px;
+  padding-top: 40px;
+  box-sizing: border-box;
 }
 
 .vertical-toolbar nav ul {
@@ -224,32 +223,37 @@ display: block;
   margin: 0;
 }
 
-.vertical-toolbar nav li + li {
-  margin-top: 15px;
-}
-
-.vertical-toolbar .inactive-link {
+.vertical-toolbar .vt-item a {
   display: block;
-  color: #999;
+  color: #000;
   text-decoration: none;
   font-weight: bold;
-  pointer-events: none;
+  padding-left: 20px;
+  font-size: 1rem;
+  margin-bottom: 15px;
 }
 
 .content-area {
   margin-left: 200px;
   width: calc(100% - 200px);
   padding: 20px;
-  box-sizing: border-box;
+  padding-right: 160px;
   position: relative;
   overflow-y: auto;
+  text-align: left;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 30px;
 }
 
 .work-button {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: #2c2c2c;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -258,17 +262,53 @@ display: block;
   cursor: pointer;
 }
 
-.work-button:hover {
-  background-color: #444;
+.enter-btn {
+  background-color: #003CC8;
 }
 
-.profile-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 80px;
+.enter-btn:hover {
+  background-color: #002BB0;
 }
 
-.profile-list li {
-  margin-bottom: 8px;
+.exit-btn {
+  background-color: #2882E6;
+}
+
+.exit-btn:hover {
+  background-color: #1F6FC2;
+}
+
+.name-text {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.work-block {
+  margin-bottom: 20px;
+}
+
+.work-label {
   font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.work-details {
+  font-size: 1rem;
+  padding-left: 20px;
+  text-align: left;
+}
+
+.spec-block {
+  margin-bottom: 20px;
+}
+
+.spec-label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.spec-details {
+  font-size: 1rem;
+  padding-left: 20px;
+  text-align: left;
 }

@@ -2,52 +2,48 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-  <div class="profile-container">
-    <aside class="vertical-toolbar">
-      <nav>
-        <ul>
-          <li><a href="#" class="inactive-link">Works</a></li>
-        </ul>
-      </nav>
-    </aside>
-    <section class="content-area">
-      {% if worker %}
-        <form method="post" action="{% url 'toggle_at_work' %}">
-          {% csrf_token %}
-          <button type="submit" class="work-button">
-            {% if worker.at_work %}
-              Exit from work
-            {% else %}
-              Enter to work
-            {% endif %}
-          </button>
-        </form>
+<div class="profile-container">
+  <aside class="vertical-toolbar">
+    <nav>
+      <ul>
+        <li class="vt-item"><a href="#">Work</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-        <h2>Personal Information</h2>
-        <ul class="profile-list">
-          <li><strong>Worker ID:</strong> {{ worker.worker_id }}</li>
-          <li><strong>First Name:</strong> {{ worker.first_name }}</li>
-          <li><strong>Last Name:</strong> {{ worker.last_name }}</li>
-          <li><strong>Box:</strong> {{ worker.box }}</li>
-          <li><strong>Specializations:</strong>
-            {% for spec in worker.specializations.all %}
-              {{ spec.specialization }}{% if not forloop.last %}, {% endif %}
-            {% empty %}
-              None
-            {% endfor %}
-          </li>
-          <li><strong>Works:</strong>
-            {% for w in worker.works.all %}
-              {{ w.id_work }}{% if not forloop.last %}, {% endif %}
-            {% empty %}
-              None
-            {% endfor %}
-          </li>
-          <li><strong>At Work:</strong> {% if worker.at_work %}Yes{% else %}No{% endif %}</li>
-        </ul>
-      {% else %}
-        <p>Please <a href="{% url 'login' %}">log in</a> to view your profile.</p>
-      {% endif %}
-    </section>
-  </div>
+  <section class="content-area">
+    {% if worker %}
+      <div class="page-title">Your personal information</div>
+
+      <form method="post" action="{% url 'toggle_at_work' %}">
+        {% csrf_token %}
+        <button type="submit"
+                class="work-button {% if worker.at_work %}exit-btn{% else %}enter-btn{% endif %}">
+          {% if worker.at_work %}Exit from work{% else %}Enter to work{% endif %}
+        </button>
+      </form>
+
+      <div class="name-text">{{ worker.first_name }} {{ worker.last_name }}</div>
+
+      <div class="work-block">
+        <div class="work-label">Your place of work is</div>
+        <div class="work-details">
+          Box: {{ worker.box.number_box }}<br>
+          Hall: {{ worker.box.hall }}
+        </div>
+      </div>
+
+      <div class="spec-block">
+        <div class="spec-label">Specializations:</div>
+        <div class="spec-details">
+          {% for spec in worker.specializations.all %}
+            {{ spec.specialization }}{% if not forloop.last %}, {% endif %}
+          {% empty %}None{% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <p>Please <a href="{% url 'login' %}">log in</a> to view your profile.</p>
+    {% endif %}
+  </section>
+</div>
 {% endblock %}
