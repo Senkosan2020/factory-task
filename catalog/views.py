@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import check_password
-from .models import Master, Worker, Box
+from .models import Master, Worker, Box, Work
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
 
 def index(request):
     context = {
@@ -65,3 +68,33 @@ def toggle_at_work(request):
     worker.save(update_fields=["at_work"])
 
     return redirect("profile")
+
+
+@csrf_exempt
+def add_work(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            work_id = data.get("id_work")
+            worker_id = data.get("worker_id")
+
+            if not work_id or not worker_id:
+                return JsonResponse({"success": False, "error": "Missing data"})
+
+            work = Work.objects.get(pk=work_id)
+            worker = Worker.objects.get(pk=worker_id)
+
+            if work in worker.works.all():
+                return JsonResponse({"success": False, "error": "Work already assigned"})
+
+            worker.works.add(work)
+            return JsonResponse({"success": True})
+
+        except Work.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Work not found"})
+        except Worker.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Worker not found"})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Invalid request"})

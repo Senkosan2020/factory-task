@@ -2,6 +2,7 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
+<!--suppress XmlDuplicatedId -->
 <div class="profile-container">
   <aside class="vertical-toolbar">
     <nav>
@@ -41,9 +42,76 @@
           {% empty %}None{% endfor %}
         </div>
       </div>
+
+      <button id="openModal" class="btn btn-primary">Add work</button>
     {% else %}
       <p>Please <a href="{% url 'login' %}">log in</a> to view your profile.</p>
     {% endif %}
   </section>
 </div>
+
+<div id="workModal" class="modal">
+  <div class="modal-content">
+    <h2>Enter id work</h2>
+    <input type="text" id="workIdInput" placeholder="Work ID">
+    <div class="modal-buttons">
+      <button id="confirmWork">Confirm</button>
+      <button id="cancelWork">Cancel</button>
+    </div>
+    <p id="workError" style="color: red;"></p>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("workModal");
+    const openBtn = document.getElementById("openModal");
+    const confirmBtn = document.getElementById("confirmWork");
+    const cancelBtn = document.getElementById("cancelWork");
+    const input = document.getElementById("workIdInput");
+    const errorText = document.getElementById("workError");
+
+    openBtn.onclick = () => {
+      modal.style.display = "block";
+      input.value = "";
+      errorText.textContent = "";
+    };
+
+    cancelBtn.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    confirmBtn.onclick = () => {
+      const workId = input.value.trim();
+      if (!workId) {
+        errorText.textContent = "Please enter a valid ID.";
+        return;
+      }
+
+      fetch("/add-work/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+          id_work: workId,
+          worker_id: "{{ worker.worker_id }}"
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            errorText.textContent = data.error || "Error";
+          }
+        });
+    };
+
+    window.onclick = (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    };
+  });
+</script>
 {% endblock %}

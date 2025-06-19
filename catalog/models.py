@@ -62,7 +62,7 @@ class Work(models.Model):
             raise ValidationError("id_work must be exactly 7 characters long.")
 
         if self.time_on_work != 7:
-            raise ValidationError("time_on_work must be exactly 9 characters long.")
+            raise ValidationError("time_on_work must be exactly 7 characters long.")
 
     def __str__(self):
         return f"Work {self.id_work} by {self.master} - {self.specialization}"
