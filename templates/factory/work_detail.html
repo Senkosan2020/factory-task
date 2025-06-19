@@ -23,6 +23,9 @@
     <div class="work-info">
       <p><strong>ID:</strong> {{ work.id_work }}</p>
       <p><strong>Type:</strong> {{ work.specialization }}</p>
+      <p><strong>Master:</strong> {{ work.master.first_name }} {{ work.master.last_name }}</p>
+      <p><strong>Preparing Time:</strong> {{ work.get_preparing_minutes }} minutes</p>
+      <p><strong>Time for work:</strong> {{ work.get_work_minutes }} minutes</p>
       <p><strong>Status:</strong> {% if work.ready %}Ready{% else %}Not Ready{% endif %}</p>
     </div>
   </section>

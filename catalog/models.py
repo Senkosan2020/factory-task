@@ -67,6 +67,14 @@ class Work(models.Model):
     def __str__(self):
         return f"Work {self.id_work} by {self.master} - {self.specialization}"
 
+    def get_preparing_minutes(self):
+        str_time = str(int(self.time_on_work)).zfill(7)
+        return int(str_time[:2])
+
+    def get_work_minutes(self):
+        str_time = str(int(self.time_on_work)).zfill(7)
+        return round(int(str_time[2:]) / 60)
+
 
 class Worker(models.Model):
     worker_id = models.CharField(max_length=10, primary_key=True, unique=True)
