@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Work Detail{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+  {% include "includes/sidebar.html" %}
+
+  <section class="content-area">
+    <h2>Work Detail</h2>
+
+    <div class="button-group">
+      <form method="post" action="{% url 'remove_and_ready' work.id_work %}">
+        {% csrf_token %}
+        <button type="submit" class="square-blue-button">Remove and mark ready</button>
+      </form>
+
+      <form method="post" action="{% url 'remove_only' work.id_work %}">
+        {% csrf_token %}
+        <button type="submit" class="square-blue-button">Remove only</button>
+      </form>
+    </div>
+
+    <div class="work-info">
+      <p><strong>ID:</strong> {{ work.id_work }}</p>
+      <p><strong>Type:</strong> {{ work.specialization }}</p>
+      <p><strong>Status:</strong> {% if work.ready %}Ready{% else %}Not Ready{% endif %}</p>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth.decorators import login_required
 from .models import Master, Worker, Box, Work
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 import json
+from factory_task.decorators import worker_login_required
+
 
 def index(request):
     context = {
@@ -102,8 +105,68 @@ def add_work(request):
 
 def get_work_type(request):
     work_id = request.GET.get("id_work")
+    worker_pk = request.session.get("worker_pk")
+    if not worker_pk:
+        return redirect("login")
     try:
         work = Work.objects.get(pk=work_id)
         return JsonResponse({"success": True, "type": work.specialization.specialization})
     except Work.DoesNotExist:
         return JsonResponse({"success": False})
+
+
+def work_detail(request, pk):
+    work = get_object_or_404(Work, pk=pk)
+    worker_pk = request.session.get("worker_pk")
+    if not worker_pk:
+        return redirect("login")
+
+    worker = get_object_or_404(Worker, pk=worker_pk)
+    return render(request, "factory/work_detail.html", {"work": work, "worker": worker})
+
+
+def remove_and_ready(request, pk):
+    if request.method == "POST":
+        worker_pk = request.session.get("worker_pk")
+        if not worker_pk:
+            return redirect("login")
+
+        worker = get_object_or_404(Worker, pk=worker_pk)
+        work = get_object_or_404(Work, pk=pk)
+
+        if work in worker.works.all():
+            worker.works.remove(work)
+            work.ready = True
+            work.save()
+            return redirect("profile")
+
+        return HttpResponseForbidden("You cannot modify this work.")
+    return redirect("work_detail", pk=pk)
+
+
+def remove_only(request, pk):
+    if request.method == "POST":
+        worker_pk = request.session.get("worker_pk")
+        if not worker_pk:
+            return redirect("login")
+
+        worker = get_object_or_404(Worker, pk=worker_pk)
+        work = get_object_or_404(Work, pk=pk)
+
+        if work in worker.works.all():
+            worker.works.remove(work)
+            return redirect("profile")
+
+        return HttpResponseForbidden("You cannot modify this work.")
+    return redirect("work_detail", pk=pk)
+
+
+def some_view(request):
+    worker = get_object_or_404(Worker, worker_id="some_id_from_context")
+    worker_pk = request.session.get("worker_pk")
+    if not worker_pk:
+        return redirect("login")
+    context = {
+        "worker": worker,
+    }
+    return render(request, "factory/profile.html", context)

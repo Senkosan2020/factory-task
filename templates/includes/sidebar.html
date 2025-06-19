@@ -1,0 +1,18 @@
+<aside class="vertical-toolbar">
+    <nav>
+        <ul>
+            <li class="vt-item"><span style="font-weight: bold; margin-left: 10px;">Work</span></li>
+            {% if worker %}
+                {% for work in worker.works.all %}
+                    <li class="vt-item">
+                        <a href="{% url 'work_detail' pk=work.pk %}">
+                            {{ work.id_work }} - {{ work.specialization }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <li class="vt-item">No work assigned</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </nav>
+</aside>

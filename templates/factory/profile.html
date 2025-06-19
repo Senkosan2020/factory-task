@@ -4,13 +4,7 @@
 {% block content %}
 <!--suppress XmlDuplicatedId -->
 <div class="profile-container">
-  <aside class="vertical-toolbar">
-    <nav>
-      <ul>
-        <li class="vt-item"><a href="#">Work</a></li>
-      </ul>
-    </nav>
-  </aside>
+  {% include "includes/sidebar.html" %}
 
   <section class="content-area">
     {% if worker %}

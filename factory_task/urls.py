@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from catalog.views import index, worker_login, worker_logout, profile, toggle_at_work, add_work, get_work_type
+from catalog.views import index, worker_login, worker_logout, profile, toggle_at_work, add_work, get_work_type, work_detail, remove_and_ready, remove_only
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +27,7 @@ urlpatterns = [
     path("profile/toggle/", toggle_at_work, name="toggle_at_work"),
     path("add-work/", add_work, name="add_work"),
     path("get-work-type/", get_work_type, name="get_work_type"),
+    path("work/<str:pk>/detail/", work_detail, name="work_detail"),
+    path("work/<str:pk>/remove_and_ready/", remove_and_ready, name="remove_and_ready"),
+    path("work/<str:pk>/remove_only/", remove_only, name="remove_only"),
 ]

@@ -352,3 +352,25 @@ display: block;
   border-radius: 0;
   margin-top: 20px;
 }
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.square-blue-button {
+  background-color: #003CC8;
+  border: 2px solid black;
+  color: white;
+  width: 200px;
+  height: 60px;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.square-blue-button:hover {
+  background-color: #002a94;
+}
