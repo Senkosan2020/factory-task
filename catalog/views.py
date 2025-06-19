@@ -98,3 +98,12 @@ def add_work(request):
             return JsonResponse({"success": False, "error": str(e)})
 
     return JsonResponse({"success": False, "error": "Invalid request"})
+
+
+def get_work_type(request):
+    work_id = request.GET.get("id_work")
+    try:
+        work = Work.objects.get(pk=work_id)
+        return JsonResponse({"success": True, "type": work.specialization.specialization})
+    except Work.DoesNotExist:
+        return JsonResponse({"success": False})

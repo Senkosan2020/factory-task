@@ -54,6 +54,7 @@
   <div class="modal-content">
     <h2>Enter id work</h2>
     <input type="text" id="workIdInput" placeholder="Work ID">
+    <p id="workTypeInfo" style="margin: 5px 0; font-weight: bold;"></p>
     <div class="modal-buttons">
       <button id="confirmWork">Confirm</button>
       <button id="cancelWork">Cancel</button>
@@ -70,11 +71,13 @@
     const cancelBtn = document.getElementById("cancelWork");
     const input = document.getElementById("workIdInput");
     const errorText = document.getElementById("workError");
+    const workTypeInfo = document.getElementById("workTypeInfo");
 
     openBtn.onclick = () => {
       modal.style.display = "block";
       input.value = "";
       errorText.textContent = "";
+      workTypeInfo.textContent = "";
     };
 
     cancelBtn.onclick = () => {
@@ -108,6 +111,25 @@
           }
         });
     };
+
+    input.addEventListener("input", () => {
+      const workId = input.value.trim();
+      if (workId.length === 7) {
+        fetch(`/get-work-type/?id_work=${workId}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              workTypeInfo.textContent = data.type;
+              workTypeInfo.style.color = "green";
+            } else {
+              workTypeInfo.textContent = "Work not found";
+              workTypeInfo.style.color = "red";
+            }
+          });
+      } else {
+        workTypeInfo.textContent = "";
+      }
+    });
 
     window.onclick = (e) => {
       if (e.target === modal) modal.style.display = "none";
