@@ -1,3 +1,5 @@
 Django==3.2.25
 django-crispy-forms==1.13.0
 flake8
+pytest>=7.0
+pytest-django>=4.5
