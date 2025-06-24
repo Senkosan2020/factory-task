@@ -16,18 +16,31 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from catalog.views import index, worker_login, worker_logout, profile, toggle_at_work, add_work, get_work_type, work_detail, remove_and_ready, remove_only
+from catalog.views import (
+    IndexView,
+    WorkerLoginView,
+    WorkerLogoutView,
+    ProfileView,
+    ToggleAtWorkView,
+    AddWorkView,
+    GetWorkTypeView,
+    WorkDetailView,
+    RemoveAndReadyView,
+    RemoveOnlyView,
+    SomeView
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
-    path('accounts/login/', worker_login, name='login'),
-    path('accounts/logout/', worker_logout, name='logout'),
-    path("profile/", profile, name="profile"),
-    path("profile/toggle/", toggle_at_work, name="toggle_at_work"),
-    path("add-work/", add_work, name="add_work"),
-    path("get-work-type/", get_work_type, name="get_work_type"),
-    path("work/<str:pk>/detail/", work_detail, name="work_detail"),
-    path("work/<str:pk>/remove_and_ready/", remove_and_ready, name="remove_and_ready"),
-    path("work/<str:pk>/remove_only/", remove_only, name="remove_only"),
+    path('', IndexView.as_view(), name='index'),
+    path('accounts/login/', WorkerLoginView.as_view(), name='login'),
+    path('accounts/logout/', WorkerLogoutView.as_view(), name='logout'),
+    path("profile/", ProfileView.as_view(), name="profile"),
+    path("profile/toggle/", ToggleAtWorkView.as_view(), name="toggle_at_work"),
+    path("add-work/", AddWorkView.as_view(), name="add_work"),
+    path("get-work-type/", GetWorkTypeView.as_view(), name="get_work_type"),
+    path("work/<str:pk>/detail/", WorkDetailView.as_view(), name="work_detail"),
+    path("work/<str:pk>/remove_and_ready/", RemoveAndReadyView.as_view(), name="remove_and_ready"),
+    path("work/<str:pk>/remove_only/", RemoveOnlyView.as_view(), name="remove_only"),
+    path("some/", SomeView.as_view(), name="some_view"),
 ]

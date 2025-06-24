@@ -1,81 +1,90 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth.decorators import login_required
-from .models import Master, Worker, Box, Work
+from django.views import View
+from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.http import JsonResponse, HttpResponseForbidden
 import json
-from factory_task.decorators import worker_login_required
+
+from .models import Master, Worker, Box, Work
 
 
-def index(request):
-    context = {
-        'masters_count': Master.objects.count(),
-        'workers_count': Worker.objects.count(),
-        'boxes_count': Box.objects.count(),
-    }
-    return render(request, "factory/index.html", context)
+class IndexView(TemplateView):
+    template_name = "factory/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['masters_count'] = Master.objects.count()
+        context['workers_count'] = Worker.objects.count()
+        context['boxes_count'] = Box.objects.count()
+        return context
 
 
-def worker_login(request):
-    error = None
-    if request.method == 'POST':
+class WorkerLoginView(View):
+    def get(self, request):
+        return render(request, 'registration/login.html')
+
+    def post(self, request):
         wid = request.POST.get('worker_id')
         pwd = request.POST.get('password')
+        error = None
         try:
             worker = Worker.objects.get(worker_id=wid)
-        except Worker.DoesNotExist:
-            error = 'Invalid ID or password'
-        else:
             if check_password(pwd, worker.password):
                 request.session['worker_pk'] = worker.pk
                 return redirect('index')
             else:
                 error = 'Invalid ID or password'
-    return render(request, 'registration/login.html', {
-        'error': error
-    })
+        except Worker.DoesNotExist:
+            error = 'Invalid ID or password'
+
+        return render(request, 'registration/login.html', {'error': error})
 
 
-def worker_logout(request):
-    request.session.pop('worker_pk', None)
-    return redirect('index')
+class WorkerLogoutView(View):
+    def get(self, request):
+        request.session.pop('worker_pk', None)
+        return redirect('index')
 
 
-def profile(request):
-    worker_pk = request.session.get("worker_pk")
-    if not worker_pk:
-        return redirect("login")
-    try:
-        worker = Worker.objects.get(pk=worker_pk)
-    except Worker.DoesNotExist:
-        return redirect("login")
+class ProfileView(View):
+    def get(self, request):
+        worker_pk = request.session.get("worker_pk")
+        if not worker_pk:
+            return redirect("login")
 
-    return render(request, "factory/profile.html", {"worker": worker})
+        try:
+            worker = Worker.objects.get(pk=worker_pk)
+        except Worker.DoesNotExist:
+            return redirect("login")
+
+        return render(request, "factory/profile.html", {"worker": worker})
 
 
-def toggle_at_work(request):
-    if request.method != "POST":
+class ToggleAtWorkView(View):
+    def post(self, request):
+        worker_pk = request.session.get("worker_pk")
+        if not worker_pk:
+            return redirect("login")
+
+        try:
+            worker = Worker.objects.get(pk=worker_pk)
+        except Worker.DoesNotExist:
+            return redirect("login")
+
+        worker.at_work = not worker.at_work
+        worker.save(update_fields=["at_work"])
+
         return redirect("profile")
 
-    worker_pk = request.session.get("worker_pk")
-    if not worker_pk:
-        return redirect("login")
-
-    try:
-        worker = Worker.objects.get(pk=worker_pk)
-    except Worker.DoesNotExist:
-        return redirect("login")
-
-    worker.at_work = not worker.at_work
-    worker.save(update_fields=["at_work"])
-
-    return redirect("profile")
+    def get(self, request):
+        return redirect("profile")
 
 
-@csrf_exempt
-def add_work(request):
-    if request.method == "POST":
+@method_decorator(csrf_exempt, name='dispatch')
+class AddWorkView(View):
+    def post(self, request):
         try:
             data = json.loads(request.body)
             work_id = data.get("id_work")
@@ -100,33 +109,37 @@ def add_work(request):
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
 
-    return JsonResponse({"success": False, "error": "Invalid request"})
+    def get(self, request):
+        return JsonResponse({"success": False, "error": "Invalid request"})
 
 
-def get_work_type(request):
-    work_id = request.GET.get("id_work")
-    worker_pk = request.session.get("worker_pk")
-    if not worker_pk:
-        return redirect("login")
-    try:
-        work = Work.objects.get(pk=work_id)
-        return JsonResponse({"success": True, "type": work.specialization.specialization})
-    except Work.DoesNotExist:
-        return JsonResponse({"success": False})
+class GetWorkTypeView(View):
+    def get(self, request):
+        work_id = request.GET.get("id_work")
+        worker_pk = request.session.get("worker_pk")
+        if not worker_pk:
+            return redirect("login")
+
+        try:
+            work = Work.objects.get(pk=work_id)
+            return JsonResponse({"success": True, "type": work.specialization.specialization})
+        except Work.DoesNotExist:
+            return JsonResponse({"success": False})
 
 
-def work_detail(request, pk):
-    work = get_object_or_404(Work, pk=pk)
-    worker_pk = request.session.get("worker_pk")
-    if not worker_pk:
-        return redirect("login")
+class WorkDetailView(View):
+    def get(self, request, pk):
+        work = get_object_or_404(Work, pk=pk)
+        worker_pk = request.session.get("worker_pk")
+        if not worker_pk:
+            return redirect("login")
 
-    worker = get_object_or_404(Worker, pk=worker_pk)
-    return render(request, "factory/work_detail.html", {"work": work, "worker": worker})
+        worker = get_object_or_404(Worker, pk=worker_pk)
+        return render(request, "factory/work_detail.html", {"work": work, "worker": worker})
 
 
-def remove_and_ready(request, pk):
-    if request.method == "POST":
+class RemoveAndReadyView(View):
+    def post(self, request, pk):
         worker_pk = request.session.get("worker_pk")
         if not worker_pk:
             return redirect("login")
@@ -141,11 +154,13 @@ def remove_and_ready(request, pk):
             return redirect("profile")
 
         return HttpResponseForbidden("You cannot modify this work.")
-    return redirect("work_detail", pk=pk)
+
+    def get(self, request, pk):
+        return redirect("work_detail", pk=pk)
 
 
-def remove_only(request, pk):
-    if request.method == "POST":
+class RemoveOnlyView(View):
+    def post(self, request, pk):
         worker_pk = request.session.get("worker_pk")
         if not worker_pk:
             return redirect("login")
@@ -158,15 +173,16 @@ def remove_only(request, pk):
             return redirect("profile")
 
         return HttpResponseForbidden("You cannot modify this work.")
-    return redirect("work_detail", pk=pk)
+
+    def get(self, request, pk):
+        return redirect("work_detail", pk=pk)
 
 
-def some_view(request):
-    worker = get_object_or_404(Worker, worker_id="some_id_from_context")
-    worker_pk = request.session.get("worker_pk")
-    if not worker_pk:
-        return redirect("login")
-    context = {
-        "worker": worker,
-    }
-    return render(request, "factory/profile.html", context)
+class SomeView(View):
+    def get(self, request):
+        worker = get_object_or_404(Worker, worker_id="some_id_from_context")
+        worker_pk = request.session.get("worker_pk")
+        if not worker_pk:
+            return redirect("login")
+
+        return render(request, "factory/profile.html", {"worker": worker})
