@@ -3,3 +3,4 @@ django-crispy-forms==1.13.0
 flake8
 pytest>=7.0
 pytest-django>=4.5
+python-decouple==3.8

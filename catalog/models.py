@@ -2,7 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-
 class Specialization(models.Model):
     specialization = models.CharField(max_length=255, primary_key=True, unique=True)
     number = models.PositiveIntegerField(

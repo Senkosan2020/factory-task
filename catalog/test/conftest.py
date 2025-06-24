@@ -1,6 +1,6 @@
 import pytest
 from catalog.models import Worker, Work
-from django.contrib.auth.models import User
+
 
 @pytest.fixture
 def worker(db):
@@ -9,6 +9,7 @@ def worker(db):
         last_name="Worker",
         worker_id="1234567890"
     )
+
 
 @pytest.fixture
 def work(db):
