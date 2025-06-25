@@ -8,15 +8,15 @@ The system allows workers and masters to view their current tasks, accept or rem
 
 DB structure:
 
-![Structure_DB.png](Structure_DB.png)
+![Structure_DB.png](Image/Structure_DB.png)
 
 Home page:
 
-![Home_page_img.png](Home_page_img.png)
+![Home_page_img.png](Image/Home_page_img.png)
 
 Personal page:
 
-![Personal_page_img.png](Personal_page_img.png)
+![Personal_page_img.png](Image/Personal_page_img.png)
 
 2. Functionality
 
