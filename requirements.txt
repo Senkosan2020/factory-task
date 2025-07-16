@@ -5,6 +5,7 @@ colorama==0.4.5
 Django==3.2.25
 django-crispy-forms==1.13.0
 flake8==5.0.4
+gunicorn==21.2.0
 importlib-metadata==4.2.0
 iniconfig==1.1.1
 mccabe==0.7.0
