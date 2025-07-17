@@ -49,3 +49,7 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 ```
+
+## 🚀 Deployed Project
+
+[Click here to view the deployed app](https://factory-task.onrender.com)
