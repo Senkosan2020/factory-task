@@ -53,3 +53,18 @@ python manage.py runserver
 ## 🚀 Deployed Project
 
 [Click here to view the deployed app](https://factory-task.onrender.com)
+
+🧪 Test User
+You can use the following test user to log in and explore the application:
+
+Required:
+
+🆔 Worker ID: 4827361950
+
+🔑 Password: user12345
+
+Optional:
+
+👤 First Name: User_name
+
+👥 Last Name: Last_name
