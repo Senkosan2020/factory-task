@@ -61,7 +61,7 @@ class Work(models.Model):
         if len(self.id_work) != 7:
             raise ValidationError("id_work must be exactly 7 characters long.")
 
-        if len(self.time_on_work) != 7:
+        if len(str(self.time_on_work)) != 7:
             raise ValidationError("time_on_work must be exactly 7 characters long.")
 
     def __str__(self):
